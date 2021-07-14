@@ -1,3 +1,6 @@
+#ifndef UTILS_HPP
+#define UTILS_HPP
+
 #include <vector>
 #include <string>
 #include <cstring>
@@ -59,3 +62,6 @@ namespace ericahttp {
 		    const char *message;
 	};
 }
+
+#endif
+
