@@ -1,22 +1,6 @@
 #include "../inc/http_service.hpp"
 
 namespace ericahttp {
-    void _error_handler(std::string &&msg) {
-        if(msg == "socket") {
-            throw socketCreateException();
-        } else if(msg == "bind") {
-
-        } else if(msg == "listen") {
-
-        } else if(msg == "fork") {
-
-        } else if(msg == "signal") {
-
-        } else if(msg == "waitpid") {
-
-        }
-    }
-
     // Interface class
     std::unordered_map<int, std::string> 
     _http_service_base::_status_table{{100, "Continue"}, {101, "Switching Protocols"}, {102, "Processing"},
@@ -29,7 +13,7 @@ namespace ericahttp {
     void _http_service_base::_startup(int port, int max_client_num) {
         _wel_socket = socket(PF_INET, SOCK_STREAM, 0);
         if(_wel_socket == -1)
-            _error_handler("socket");
+            throw socketCreateException();
         sockaddr_in serv_addr;
         memset(&serv_addr, 0, sizeof(serv_addr));
         serv_addr.sin_family = AF_INET;
@@ -38,9 +22,9 @@ namespace ericahttp {
         if(bind(_wel_socket, 
                 reinterpret_cast<sockaddr*>(&serv_addr), 
                 sizeof(serv_addr)) == -1)
-            _error_handler("bind");
+            throw bindException();
         if(listen(_wel_socket, max_client_num) == -1)
-            _error_handler("listen");
+            throw listenException();
     }
 
     int _http_service_base::_accept(sockaddr_in &client_msg) {
@@ -50,53 +34,83 @@ namespace ericahttp {
 
     std::string _http_service_base::_build_header(int status_code) const {
         std::stringstream ss;
-        ss << "HTTP/1.1" << " " << status_code << _status_table[status_code] << "\r\n"
-           << "";
+        ss << "HTTP/1.1" << " " << status_code << " " << _status_table[status_code];
         return ss.str();
     }
 
     std::string _http_service_base::_make_packet(const std::string &header, 
                                                  const std::string &body) {
         std::stringstream ss;
-        ss << header << "\r\n" << body;
+        ss << header << "\r\n" 
+           << "Content-Length:" << body.length() << "\r\n"
+           << "\r\n"
+           << body;
         return ss.str();
     }
 
     std::pair<int, std::string> _http_service_base::_recv_packet(int client) {
-        int content_len = 0;
 		std::string data_packet("");
 		char tmp[4096];
-		while(true) {
-			ssize_t len = recv(client, tmp, 4096, 0);
-			if(len <= 0)
-				break;
-			data_packet.append(tmp, 4096);
-			auto index = data_packet.find("Content-Length");
-			if(index != std::string::npos) {
-				std::string str = "";
-				for(; data_packet[index] != ':'; ++index);
-				++index;
-				for(; data_packet[index] != '\r'; ++index)
-					str += data_packet[index];
-				std::stringstream ss(str);
-				ss >> content_len;
-				break;
-			}
-			memset(tmp, 0, 4096);
-		}
+		ssize_t content_len = recv(client, tmp, 4096, 0);
+		data_packet.append(tmp, 4096);
         return std::make_pair(content_len, data_packet);
     }
 
-    std::string _http_service_base::_get(const std::string &path) {
-        
+    std::string _http_service_base::_get(std::string &path,
+                                         const std::string &para) {
+        std::string content;
+        if(path[0] == '/')
+            path.erase(path.begin());
+        if(path.find("/cgi") == std::string::npos) {
+            // Static file(read only)
+            std::ifstream target(path);
+            if(!target)
+                throw notFoundException();
+            std::stringstream buf;
+            buf << target.rdbuf();
+            content = buf.str();
+            target.close();
+        } else {
+            // Dynamic file
+            try {
+                content = this->_execute_cgi(path, para);
+            } catch(...) {
+                throw cgiException();
+            }
+        }
+        std::cout << "Content:\n" << content << std::endl;
+        return content;
     }
 
-    void _http_service_base::_post(const std::string &path,
-                                   const std::string &para) {
-    
+    void _http_service_base::_post(std::string &path,
+                                   const std::string &body) {
+        if(path.find("/cgi") == std::string::npos) {
+            // Static file(write into)
+            std::ofstream target(path, std::ios::app);
+            if(!target)
+                throw notFoundException();
+            auto p = split(body, "&");    // split para
+            for(std::string s : p)
+                target << s << "\r\n";
+            target.close();
+        } else {
+             // Dynamic file
+            try {
+                this->_execute_cgi(path, body);
+            } catch(...) {
+                throw cgiException();
+            }
+        }
     }
 
-    std::pair<int, std::string> _http_service_base::_extract_status_line(const std::string &status_line) {
+    std::string _http_service_base::_execute_cgi(const std::string &path,
+                                                 const std::string &para) {
+        auto p = split(para, "&");    // split para
+
+    }
+
+    std::pair<int, std::string> _http_service_base::_extract_status_line(const std::string &status_line, 
+                                                                         const std::string &body) {
         int status_code = -1;
         std::string rbody = "";
         auto status_words = split(status_line);
@@ -107,44 +121,42 @@ namespace ericahttp {
         // GET
         if(status_words[0] == "GET") {
             try {
-                rbody = _get(status_words[1]);
+                // Extract file's name and paraments.
+                auto fp = split(status_words[1], "?");
+                rbody = _get(fp[0], fp[1]);
                 status_code = 200;
-            } catch(...) {
+            } catch(notFoundException ne) {
                 status_code = 404;
+            } catch(cgiException ce) {
+                status_code = 502;
             }
         // POST
         } else if(status_words[0] == "POST") {
             try {
-                // Extract file's name and paraments.
-                auto fp = split(status_words[1], "?");
-                _post(fp[0], fp[1]);
+                _post(status_words[1], body);
                 status_code = 200;
-            } catch(...) {
+            } catch(notFoundException ne) {
+                status_code = 404;
+            } catch(cgiException ce) {
                 status_code = 502;
             }
+
         }
         return std::make_pair(status_code, rbody);
-    }
-
-    void _http_service_base::_extract_header_line(const std::vector<std::string> &header_lines) {
-
-    }
-    
-    void _http_service_base::_extract_body(const std::string &body) {
-        if(body.empty())
-            return;
     }
 
     // Multi-process service
     void _pdead(int pid) {
         int wstatus;
         if(waitpid(pid, &wstatus, WNOHANG) == -1)
-            _error_handler("waitpid");
+            std::cout << "Warning: kill zombie process failed, pid is " << pid << std::endl;
     }
 
     http_service_multiprocess::http_service_multiprocess(int port, int max_client_num) {
         this->_pinit();
         this->_startup(port, max_client_num);
+
+        std::cout << "Listening..." << std::endl;
     }
 
     http_service_multiprocess::~http_service_multiprocess() {
@@ -159,51 +171,72 @@ namespace ericahttp {
         sa.sa_flags = 0;
         sigemptyset(&sa.sa_mask);
         if(sigaction(SIGCHLD, &sa, 0) == -1)
-            _error_handler("signal");
+            std::cout << "Warning: signal register failed, maybe rise zombie process" << std::endl;
     }
 
     void http_service_multiprocess::request_handler() {
         while(true) {
             int client = this->_accept(_client_msg);
+
+            std::cout << "Accepted..." << std::endl;
+
             if(client != -1) {
+                int status_code;    // status code
+                std::string response;    // response packet
                 // Create new process
                 pid_t child = fork();
                 if(child == -1) {
+                    std::cout << "Child process create failed..." << std::endl;
+
+                    status_code = 503;
+                    response = this->_make_packet(this->_build_header(status_code), "");
+                    // Send response packet
+                    send(client, response.c_str(), response.length(), 0);
                     close(client);
-                    _error_handler("fork");
                 }
                 else if(child == 0) {
+                    std::cout << "Ready to receive packet..." << std::endl; 
                     // Handle request in child process
-                    int status_code;    // status code
                     // Extract request packet
                     auto mc = this->_recv_packet(client);
                     int content_len = mc.first;
                     std::string msg = mc.second;
+
+                    std::cout << "Recv msg's len is " << content_len << " bytes" << std::endl;
+                    std::cout << msg << std::endl;
+
                     auto lines = split(msg, "\r\n\r\n");
                     if(lines.size() < 1) {
+                        std::cout << "400 Bad request" << std::endl;
+
                         status_code = 400;
-                        close(client);
-                        continue;
-                    }
-                    std::string body{lines[1].begin(), lines[1].begin() + content_len};    // request packet body
-                    lines = split(lines[0], "\r\n");    
-                    std::string status_line = lines[0];    // request status_line
-                    std::vector<std::string> header_lines{lines.begin() + 1, lines.end()};    // request header lines
-                    // Analyze statue_line
-                    auto sl = _extract_status_line(status_line);
-                    status_code = sl.first;
-                    if(status_code == -1) {
-                        close(client);
-                        continue;
-                    }
-                    if(status_code == 200) {
-                        // Analyze header line(Except "Content-Length")
-                        this->_extract_header_line(header_lines);
-                        // Analyze body
-                        this->_extract_body(body);
+                        response = this->_make_packet(this->_build_header(status_code), "");
+                    } else {
+                        std::string body{lines[1].begin(), lines[1].begin() + content_len};    // request packet body
+                        lines = split(lines[0], "\r\n");    
+                        std::string status_line = lines[0];    // request status_line
+                        std::vector<std::string> header_lines{lines.begin() + 1, lines.end()};    // request header lines
+
+                        std::cout << "Status line:\n" << status_line << std::endl;
+                        std::cout << "Header line:\n";
+                        for(auto h : header_lines)
+                            std::cout << h << std::endl;
+                        std::cout << "Body:\n" << body << std::endl;
+
+                        // Analyze statue_line
+                        auto sl = _extract_status_line(status_line, body);
+                        status_code = sl.first;
+                        if(status_code == -1) {
+                            close(client);
+                            continue;
+                        } else if(status_code == 200) {
+                            response = this->_make_packet(this->_build_header(status_code), sl.second);
+                        } else {
+                            response = this->_make_packet(this->_build_header(status_code), "");
+                        }
                     }
                     // Send response packet
-                    std::string response = this->_make_packet(this->_build_header(status_code), sl.second);
+                    std::cout << "Response:\n" << response << std::endl;
                     send(client, response.c_str(), response.length(), 0);
                     // Close client connection
                     close(client);

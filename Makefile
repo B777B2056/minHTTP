@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named client_test
+# Target rules for targets named test
 
 # Build rule for target.
-client_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 client_test
-.PHONY : client_test
+test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
 # fast build rule for target.
-client_test/fast:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/build
-.PHONY : client_test/fast
+test/fast:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
 main.o: main.cpp.o
 
@@ -129,7 +129,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -138,7 +138,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -147,7 +147,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 src/http_client.o: src/http_client.cpp.o
@@ -156,7 +156,7 @@ src/http_client.o: src/http_client.cpp.o
 
 # target to build an object file
 src/http_client.cpp.o:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/http_client.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_client.cpp.o
 .PHONY : src/http_client.cpp.o
 
 src/http_client.i: src/http_client.cpp.i
@@ -165,7 +165,7 @@ src/http_client.i: src/http_client.cpp.i
 
 # target to preprocess a source file
 src/http_client.cpp.i:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/http_client.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_client.cpp.i
 .PHONY : src/http_client.cpp.i
 
 src/http_client.s: src/http_client.cpp.s
@@ -174,7 +174,7 @@ src/http_client.s: src/http_client.cpp.s
 
 # target to generate assembly for a file
 src/http_client.cpp.s:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/http_client.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_client.cpp.s
 .PHONY : src/http_client.cpp.s
 
 src/http_service.o: src/http_service.cpp.o
@@ -183,7 +183,7 @@ src/http_service.o: src/http_service.cpp.o
 
 # target to build an object file
 src/http_service.cpp.o:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/http_service.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_service.cpp.o
 .PHONY : src/http_service.cpp.o
 
 src/http_service.i: src/http_service.cpp.i
@@ -192,7 +192,7 @@ src/http_service.i: src/http_service.cpp.i
 
 # target to preprocess a source file
 src/http_service.cpp.i:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/http_service.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_service.cpp.i
 .PHONY : src/http_service.cpp.i
 
 src/http_service.s: src/http_service.cpp.s
@@ -201,7 +201,7 @@ src/http_service.s: src/http_service.cpp.s
 
 # target to generate assembly for a file
 src/http_service.cpp.s:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/http_service.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_service.cpp.s
 .PHONY : src/http_service.cpp.s
 
 src/utils.o: src/utils.cpp.o
@@ -210,7 +210,7 @@ src/utils.o: src/utils.cpp.o
 
 # target to build an object file
 src/utils.cpp.o:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/utils.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/utils.cpp.o
 .PHONY : src/utils.cpp.o
 
 src/utils.i: src/utils.cpp.i
@@ -219,7 +219,7 @@ src/utils.i: src/utils.cpp.i
 
 # target to preprocess a source file
 src/utils.cpp.i:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/utils.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/utils.cpp.i
 .PHONY : src/utils.cpp.i
 
 src/utils.s: src/utils.cpp.s
@@ -228,7 +228,7 @@ src/utils.s: src/utils.cpp.s
 
 # target to generate assembly for a file
 src/utils.cpp.s:
-	$(MAKE) -f CMakeFiles/client_test.dir/build.make CMakeFiles/client_test.dir/src/utils.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/utils.cpp.s
 .PHONY : src/utils.cpp.s
 
 # Help Target
@@ -239,7 +239,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... client_test"
+	@echo "... test"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

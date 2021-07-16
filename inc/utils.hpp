@@ -61,6 +61,62 @@ namespace ericahttp {
 		private:
 		    const char *message;
 	};
+
+    // TCP bind ERROR
+	class bindException : public std::exception {
+		public:
+		    bindException() : message("Error: TCP bind failed.") {}
+		    ~bindException() throw () {}
+
+		    virtual const char* what() const throw () {
+		        return message;
+		    }
+
+		private:
+		    const char *message;
+	};
+
+    // TCP listen ERROR
+	class listenException : public std::exception {
+		public:
+		    listenException() : message("Error: TCP listen failed.") {}
+		    ~listenException() throw () {}
+
+		    virtual const char* what() const throw () {
+		        return message;
+		    }
+
+		private:
+		    const char *message;
+	};
+
+    // 404 Not Found
+	class notFoundException : public std::exception {
+		public:
+		    notFoundException() : message("") {}
+		    ~notFoundException() throw () {}
+
+		    virtual const char* what() const throw () {
+		        return message;
+		    }
+
+		private:
+		    const char *message;
+	};
+
+    // 502 CGI Error
+	class cgiException : public std::exception {
+		public:
+		    cgiException() : message("") {}
+		    ~cgiException() throw () {}
+
+		    virtual const char* what() const throw () {
+		        return message;
+		    }
+
+		private:
+		    const char *message;
+	};
 }
 
 #endif

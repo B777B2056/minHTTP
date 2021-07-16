@@ -1,6 +1,7 @@
 #ifndef HTTP_SERVICE
 #define HTTP_SERVICE
 
+#include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -20,9 +21,6 @@ extern "C" {
 }
 
 namespace ericahttp {
-    // Error handler.
-    void _error_handler(std::string &&msg);
-
     // Base interface
     class _http_service_base {
         protected:
@@ -41,16 +39,18 @@ namespace ericahttp {
             // Receive packet from client's request
             std::pair<int, std::string> _recv_packet(int client);
             // GET method.
-            virtual std::string _get(const std::string &path);
-            // POST method(Excute CGI file).
-            virtual void _post(const std::string &path,
-                               const std::string &para);
+            virtual std::string _get(std::string &path,
+                                     const std::string &para);
+            // POST method.
+            virtual void _post(std::string &path,
+                               const std::string &body);
+            // Execute CGI program.
+            virtual std::string _execute_cgi(const std::string &path,
+                                             const std::string &para);
             // Analyze status line
-            virtual std::pair<int, std::string> _extract_status_line(const std::string &status_line);
-            // Analyze header lines
-            virtual void _extract_header_line(const std::vector<std::string> &header_lines);
-            // Analyze body
-            virtual void _extract_body(const std::string &body);
+            virtual std::pair<int, std::string> 
+                    _extract_status_line(const std::string &status_line, 
+                                         const std::string &body);
 
         public:
             // Status code-description table
