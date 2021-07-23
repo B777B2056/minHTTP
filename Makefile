@@ -177,32 +177,32 @@ src/http_client.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_client.cpp.s
 .PHONY : src/http_client.cpp.s
 
-src/http_service.o: src/http_service.cpp.o
+src/http_server.o: src/http_server.cpp.o
 
-.PHONY : src/http_service.o
+.PHONY : src/http_server.o
 
 # target to build an object file
-src/http_service.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_service.cpp.o
-.PHONY : src/http_service.cpp.o
+src/http_server.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_server.cpp.o
+.PHONY : src/http_server.cpp.o
 
-src/http_service.i: src/http_service.cpp.i
+src/http_server.i: src/http_server.cpp.i
 
-.PHONY : src/http_service.i
+.PHONY : src/http_server.i
 
 # target to preprocess a source file
-src/http_service.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_service.cpp.i
-.PHONY : src/http_service.cpp.i
+src/http_server.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_server.cpp.i
+.PHONY : src/http_server.cpp.i
 
-src/http_service.s: src/http_service.cpp.s
+src/http_server.s: src/http_server.cpp.s
 
-.PHONY : src/http_service.s
+.PHONY : src/http_server.s
 
 # target to generate assembly for a file
-src/http_service.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_service.cpp.s
-.PHONY : src/http_service.cpp.s
+src/http_server.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/http_server.cpp.s
+.PHONY : src/http_server.cpp.s
 
 src/utils.o: src/utils.cpp.o
 
@@ -246,9 +246,9 @@ help:
 	@echo "... src/http_client.o"
 	@echo "... src/http_client.i"
 	@echo "... src/http_client.s"
-	@echo "... src/http_service.o"
-	@echo "... src/http_service.i"
-	@echo "... src/http_service.s"
+	@echo "... src/http_server.o"
+	@echo "... src/http_server.i"
+	@echo "... src/http_server.s"
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"

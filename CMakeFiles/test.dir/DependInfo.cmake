@@ -6,7 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/df4b6266/Programs/minHTTP/main.cpp" "/home/df4b6266/Programs/minHTTP/CMakeFiles/test.dir/main.cpp.o"
   "/home/df4b6266/Programs/minHTTP/src/http_client.cpp" "/home/df4b6266/Programs/minHTTP/CMakeFiles/test.dir/src/http_client.cpp.o"
-  "/home/df4b6266/Programs/minHTTP/src/http_service.cpp" "/home/df4b6266/Programs/minHTTP/CMakeFiles/test.dir/src/http_service.cpp.o"
+  "/home/df4b6266/Programs/minHTTP/src/http_server.cpp" "/home/df4b6266/Programs/minHTTP/CMakeFiles/test.dir/src/http_server.cpp.o"
   "/home/df4b6266/Programs/minHTTP/src/utils.cpp" "/home/df4b6266/Programs/minHTTP/CMakeFiles/test.dir/src/utils.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

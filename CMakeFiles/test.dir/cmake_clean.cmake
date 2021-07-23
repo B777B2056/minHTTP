@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test.dir/main.cpp.o"
   "CMakeFiles/test.dir/src/http_client.cpp.o"
-  "CMakeFiles/test.dir/src/http_service.cpp.o"
+  "CMakeFiles/test.dir/src/http_server.cpp.o"
   "CMakeFiles/test.dir/src/utils.cpp.o"
   "test"
   "test.pdb"

@@ -83,18 +83,18 @@ CMakeFiles/test.dir/src/http_client.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/http_client.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/df4b6266/Programs/minHTTP/src/http_client.cpp -o CMakeFiles/test.dir/src/http_client.cpp.s
 
-CMakeFiles/test.dir/src/http_service.cpp.o: CMakeFiles/test.dir/flags.make
-CMakeFiles/test.dir/src/http_service.cpp.o: src/http_service.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/df4b6266/Programs/minHTTP/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/src/http_service.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/http_service.cpp.o -c /home/df4b6266/Programs/minHTTP/src/http_service.cpp
+CMakeFiles/test.dir/src/http_server.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/http_server.cpp.o: src/http_server.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/df4b6266/Programs/minHTTP/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/src/http_server.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/http_server.cpp.o -c /home/df4b6266/Programs/minHTTP/src/http_server.cpp
 
-CMakeFiles/test.dir/src/http_service.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/http_service.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/df4b6266/Programs/minHTTP/src/http_service.cpp > CMakeFiles/test.dir/src/http_service.cpp.i
+CMakeFiles/test.dir/src/http_server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/http_server.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/df4b6266/Programs/minHTTP/src/http_server.cpp > CMakeFiles/test.dir/src/http_server.cpp.i
 
-CMakeFiles/test.dir/src/http_service.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/http_service.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/df4b6266/Programs/minHTTP/src/http_service.cpp -o CMakeFiles/test.dir/src/http_service.cpp.s
+CMakeFiles/test.dir/src/http_server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/http_server.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/df4b6266/Programs/minHTTP/src/http_server.cpp -o CMakeFiles/test.dir/src/http_server.cpp.s
 
 CMakeFiles/test.dir/src/utils.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/utils.cpp.o: src/utils.cpp
@@ -113,7 +113,7 @@ CMakeFiles/test.dir/src/utils.cpp.s: cmake_force
 test_OBJECTS = \
 "CMakeFiles/test.dir/main.cpp.o" \
 "CMakeFiles/test.dir/src/http_client.cpp.o" \
-"CMakeFiles/test.dir/src/http_service.cpp.o" \
+"CMakeFiles/test.dir/src/http_server.cpp.o" \
 "CMakeFiles/test.dir/src/utils.cpp.o"
 
 # External object files for target test
@@ -121,7 +121,7 @@ test_EXTERNAL_OBJECTS =
 
 test: CMakeFiles/test.dir/main.cpp.o
 test: CMakeFiles/test.dir/src/http_client.cpp.o
-test: CMakeFiles/test.dir/src/http_service.cpp.o
+test: CMakeFiles/test.dir/src/http_server.cpp.o
 test: CMakeFiles/test.dir/src/utils.cpp.o
 test: CMakeFiles/test.dir/build.make
 test: CMakeFiles/test.dir/link.txt
