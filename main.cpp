@@ -10,6 +10,6 @@ int main(int argc, char **argv) {
     ss << std::string(argv[1]);
     ss >> port;
 	http_server<MultiProcess> hsm(port, 100);
-    hsm.request_handler();
+    hsm.event_loop();
 	return 0;
 }

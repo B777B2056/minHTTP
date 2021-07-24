@@ -170,9 +170,9 @@ namespace ericahttp {
         }
     }
 
-    void _http_server_base::_extract_status_line(int client,
-                                                 const std::string &status_line, 
-                                                 const std::string &body) {
+    void _http_server_base::_request_handler(int client,
+                                             const std::string &status_line, 
+                                             const std::string &body) {
         std::string rbody = "";
         auto status_words = split(status_line);
         // HTTP Version Not Supported

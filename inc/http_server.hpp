@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVICE
-#define HTTP_SERVICE
+#ifndef HTTP_SERVER
+#define HTTP_SERVER
 
 #include <fstream>
 #include <string>
@@ -52,9 +52,9 @@ namespace ericahttp {
                                       const std::string &path,
                                       const std::string &para);
             // Analyze status line
-            virtual void _extract_status_line(int client,
-                                              const std::string &status_line, 
-                                              const std::string &body);
+            virtual void _request_handler(int client,
+                                          const std::string &status_line, 
+                                          const std::string &body);
 
         public:
             // Status code-description table
@@ -63,7 +63,7 @@ namespace ericahttp {
             virtual ~_http_server_base() {}
 
             // Accept TCP connection and handle request
-            virtual void request_handler() = 0;
+            virtual void event_loop() = 0;
     };
 
     template<server_type T>
@@ -88,7 +88,7 @@ namespace ericahttp {
                 close(_wel_socket);
             }
 
-            virtual void request_handler() override {
+            virtual void event_loop() override {
                 while(true) {
                     int client = this->_accept(_client_msg);
                     std::cout << "Accepted..." << std::endl;
@@ -112,7 +112,7 @@ namespace ericahttp {
                             std::string status_line = lines[0];    // request status_line
                             std::vector<std::string> header_lines{lines.begin() + 1, lines.end()};    // request header lines
                             // Analyze statue_line and do event
-                            this->_extract_status_line(client, status_line, body);
+                            this->_request_handler(client, status_line, body);
                         }
                         std::cout << "Sended response packet..." << std::endl;
                         std::cout << "Connection closed..." << std::endl;
