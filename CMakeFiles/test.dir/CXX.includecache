@@ -39,6 +39,10 @@ signal.h
 -
 arpa/inet.h
 -
+sys/select.h
+-
+sys/epoll.h
+-
 
 /home/df4b6266/Programs/minHTTP/inc/utils.hpp
 vector
@@ -52,7 +56,9 @@ exception
 algorithm
 -
 
-/home/df4b6266/Programs/minHTTP/src/http_server.cpp
-../inc/http_server.hpp
+/home/df4b6266/Programs/minHTTP/main.cpp
+iostream
+-
+inc/http_server.hpp
 /home/df4b6266/Programs/minHTTP/inc/http_server.hpp
 

@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
     std::stringstream ss;
     ss << std::string(argv[1]);
     ss >> port;
-	http_server<MultiProcess> hsm(port, 100);
+	http_server<MultiPlexing, 100> hsm(port);
     hsm.event_loop();
 	return 0;
 }

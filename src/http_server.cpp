@@ -102,6 +102,7 @@ namespace ericahttp {
         }
     }
 
+    // REMEMBER: PIPE FIRST, FORK AFTER!!!!!!!!!!!
     void _http_server_base::_execute_cgi(int client, int method,
                                           const std::string &path,
                                           const std::string &para) {
@@ -171,8 +172,16 @@ namespace ericahttp {
     }
 
     void _http_server_base::_request_handler(int client,
-                                             const std::string &status_line, 
-                                             const std::string &body) {
+                                             const std::string &msg) {
+        auto lines = split(msg, "\r\n\r\n");
+	    if(lines.size() < 1) {
+		    this->_send_packet(client, 400, "");
+	    	return;
+	    } 
+	    std::string body{lines[1]};    // request packet body
+	    lines = split(lines[0], "\r\n");    
+	    std::string status_line = lines[0];    // request status_line
+	    std::vector<std::string> header_lines{lines.begin() + 1, lines.end()};    // request header lines
         std::string rbody = "";
         auto status_words = split(status_line);
         // HTTP Version Not Supported
