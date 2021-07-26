@@ -1,9 +1,11 @@
 #ifndef HTTP_SERVER
 #define HTTP_SERVER
 
-#include <fstream>
+#include <mutex>
 #include <string>
 #include <vector>
+#include <thread>
+#include <fstream>
 #include <sstream>
 #include <utility>
 #include <iostream>
@@ -95,8 +97,7 @@ namespace ericahttp {
                            this->_send_packet(client, 503, "");
                         } else if(child == 0) {
                             // Handle request in child process
-                            std::string msg = this->_recv_packet(client);
-                            this->_request_handler(client, msg);
+                            this->_request_handler(client, this->_recv_packet(client));
                         } else {
                             // Close child process
                             wait(nullptr);
@@ -111,11 +112,65 @@ namespace ericahttp {
         };
     
     // Multi-thread Server
+    template <int MAX_CONN>
+    class http_server<MultiThread, MAX_CONN>
+        : public _http_server_base {
+        public:
+            http_server(int port) {
+                this->_startup(port, MAX_CONN);
+            }
+
+            virtual ~http_server() {
+                // Close welcome socket 
+                close(_wel_socket);
+            }
+
+            virtual void event_loop() override {
+                for(;;) {
+                    sockaddr_in client_msg;
+                    int client = this->_accept(client_msg);
+                    if(client != -1) {
+                        ericahttp::thread_guard(std::thread(&http_server::_thread_main, this, client));
+                    } else {
+                        std::cout << "Client error" << std::endl;
+                    }
+                }
+            }
+
+        private:
+            std::mutex _mt;
+
+            void _thread_main(int client) {
+                std::string msg = this->_recv_packet(client);
+                _mt.lock();
+                this->_request_handler(client, msg);
+                _mt.unlock();
+                close(client);
+            }
+        };
 
     // Multi-plexing Server
     template <int MAX_CONN>
     class http_server<MultiPlexing, MAX_CONN> 
         : public _http_server_base {
+        public:
+            http_server(int port, bool is_select = false)
+                : _is_select(is_select) {
+                this->_startup(port, MAX_CONN);
+            }
+
+            virtual ~http_server() {
+                // Close welcome socket 
+                close(_wel_socket);
+            }
+
+            virtual void event_loop() override {
+                if(this->_is_select) 
+                    this->_select_loop();
+                else
+                    this->_epoll_loop();
+            }
+
         private:
             bool _is_select;
 
@@ -214,24 +269,6 @@ namespace ericahttp {
                 }
                 close(epfd);
                 delete[] ep_events;
-            }
-
-        public:
-            http_server(int port, bool is_select = false)
-                : _is_select(is_select) {
-                this->_startup(port, MAX_CONN);
-            }
-
-            virtual ~http_server() {
-                // Close welcome socket 
-                close(_wel_socket);
-            }
-
-            virtual void event_loop() override {
-                if(this->_is_select) 
-                    this->_select_loop();
-                else
-                    this->_epoll_loop();
             }
         };
 }

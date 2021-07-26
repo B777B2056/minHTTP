@@ -1,6 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <thread>
 #include <vector>
 #include <string>
 #include <cstring>
@@ -16,7 +17,25 @@ namespace ericahttp {
 
 	void split_url(std::string &&url, std::string &host, std::string &path);
 
-	// TCP socket creation ERROR
+	// RAII for thread guard
+    class thread_guard {
+        private:
+            std::thread _t;
+
+        public:
+            thread_guard(std::thread &&t) : _t(std::move(t)) {}
+
+            ~thread_guard() {
+                if(_t.joinable())
+                    _t.join();
+            }
+
+            thread_guard(const thread_guard &) = delete;
+
+            thread_guard& operator=(const thread_guard &) = delete;
+    };
+
+    // TCP socket creation ERROR
 	class socketCreateException : public std::exception {
 		public:
 		    socketCreateException() : message("Error: TCP socket creates failed.") {}

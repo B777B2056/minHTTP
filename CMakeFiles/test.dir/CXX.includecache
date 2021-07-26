@@ -6,12 +6,44 @@
 
 #IncludeRegexTransform: 
 
+/home/df4b6266/Programs/minHTTP/inc/http_client.hpp
+iostream
+-
+ctime
+-
+vector
+-
+string
+-
+utility
+-
+cstring
+-
+cstdlib
+-
+sstream
+-
+utils.hpp
+/home/df4b6266/Programs/minHTTP/inc/utils.hpp
+netdb.h
+-
+unistd.h
+-
+arpa/inet.h
+-
+sys/socket.h
+-
+
 /home/df4b6266/Programs/minHTTP/inc/http_server.hpp
-fstream
+mutex
 -
 string
 -
 vector
+-
+thread
+-
+fstream
 -
 sstream
 -
@@ -45,6 +77,8 @@ sys/epoll.h
 -
 
 /home/df4b6266/Programs/minHTTP/inc/utils.hpp
+thread
+-
 vector
 -
 string
@@ -61,4 +95,16 @@ iostream
 -
 inc/http_server.hpp
 /home/df4b6266/Programs/minHTTP/inc/http_server.hpp
+
+/home/df4b6266/Programs/minHTTP/src/http_client.cpp
+../inc/http_client.hpp
+/home/df4b6266/Programs/minHTTP/inc/http_client.hpp
+
+/home/df4b6266/Programs/minHTTP/src/http_server.cpp
+../inc/http_server.hpp
+/home/df4b6266/Programs/minHTTP/inc/http_server.hpp
+
+/home/df4b6266/Programs/minHTTP/src/utils.cpp
+../inc/utils.hpp
+/home/df4b6266/Programs/minHTTP/inc/utils.hpp
 
